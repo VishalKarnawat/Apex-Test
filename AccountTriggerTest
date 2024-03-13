@@ -1,0 +1,26 @@
+@isTest
+public class AccountTriggerTest {
+	@isTest
+    public static void myTest(){
+        List<Account> accountsToInsert = new List<Account>();
+        
+        for(Integer i = 0; i<200; i++){
+            Account acc = new Account(
+                Name = 'Test Account ' + i,
+                BillingState = 'CA'
+            );
+            accountsToInsert.add(acc);
+        }
+		Test.startTest();
+        insert accountsToInsert;
+        Test.stopTest();
+        
+        List<Account> insertedAccounts = [SELECT Id, BillingState, ShippingState FROM Account WHERE BillingState = 'CA'];
+        System.assertEquals(200, insertedAccounts.size(), 'Unexpected number of accounts inserted');
+        for(Account acc : insertedAccounts) {
+            System.assertEquals('CA', acc.ShippingState, 'ShippingState is not CA');
+        }
+      
+    }
+    
+}
